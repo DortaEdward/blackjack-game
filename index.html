@@ -10,9 +10,21 @@
 <body>
     <h1>Black Jack Game</h1>
     <div id='game'>
-        <div className='card-section'>
 
+        <div className='card-section'>
+            <div class="dealer-hand">
+
+            </div>
+            <div class="player-side">
+                <h2>Your Hand</h2>
+                <div class="player-hand"></div>
+            </div>
         </div>
+        <div class="">
+            <div id="player-sum"></div>
+            <div id="dealer-sum"></div>
+        </div>
+
         <button id='deal'>Deal Hand</button>
         <button id='hit'>Hit</button>
         <button id='stand'>Stand</button>
@@ -24,6 +36,6 @@
         </div>
     </div>
   
-    <script src='/app.js'></script>
+    <script src='app.js'></script>
 </body>
 </html>
