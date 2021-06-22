@@ -25,8 +25,15 @@ class Deck{
 //
 };
 
-class Dealer{
+class Player{  
+    constructor(){
+        this.hand = [];
+    };
+};
+
+class Dealer extends Player{
     constructor(deck){
+        super();
         this.deck = deck;
     };
     shuffleDeck(){
@@ -41,12 +48,18 @@ class Dealer{
     };
 
     dealHand(){
-        const dealt= []
+        const playerDealt= []
         for (let x =0; x<2;x++){
-            dealt.push(this.deck[0]);
+            playerDealt.push(this.deck[0]);
             this.deck.shift();
         }
-        return dealt
+        for (let x =0; x<2;x++){
+            this.hand.push(this.deck[0]);
+            this.deck.shift();
+        }
+        console.log('Dealer Hand: ',this.hand);
+    
+        return playerDealt
     };
 
     hit(){
@@ -54,40 +67,69 @@ class Dealer{
         this.deck.shift();
         return hit;
     };
-
-
-};
-
-class Player{  
-    constructor(){
-        this.hand = [];
+    evaluate(hand){
+        let sum = 0;
+        for(let i = 0; i<hand.length;i++){
+            sum += hand[i].number
+        };
+        console.log(`The sum of your hand is ${sum}`);
+        if(sum === 21){
+            console.log('You WON')
+        }else if(sum > 21){
+            console.log('You LOST')
+        }
+        
     };
+
+    stand(){
+        console.log('Stand')
+    }
+
+
 };
+
+
+// need to evaluate game state to see if player wins or not
+// Need to make a dealer hand
 
 const game = () =>{
+    let win = false;
+    let lose = false;
+
     const deck = new Deck();
     const player = new Player();
     const dealer = new Dealer(deck.deck);
     deck.createDeck();
     dealer.shuffleDeck();
-
-    // need to make sure player cant hit/stand if they dont have a hand
-
+    // need to check if win/lose state is true or false
+    // evalute both hands and if user stands dealer must hit
 
     const dealBtn = document.querySelector('#deal');
     dealBtn.onclick = () =>{
-        const dealtHand = dealer.dealHand();
-        for(let i =0;i<dealtHand.length;i++){
-            player.hand.push(dealtHand[i])
+        if(player.hand.length <=0){
+            const dealtHand = dealer.dealHand();
+            for(let i =0;i<dealtHand.length;i++){
+                player.hand.push(dealtHand[i])
+            }
+            console.log(player.hand);
+            dealer.evaluate(player.hand);
+    
+        }else{
+            console.log('You cant have a new hand dealt till next round!')
         }
-        console.log(player.hand);
     };
 
     const hitBtn = document.getElementById('hit');
     hitBtn.onclick = () =>{
-        const card =  dealer.hit();
-        player.hand.push(card)
-        console.log(player.hand)
+        if(player.hand.length != 0){
+            const card =  dealer.hit();
+            player.hand.push(card);
+            console.log(player.hand);
+            dealer.evaluate(player.hand);
+        }else{
+            console.log('CANT HIT!');
+        }
+        
     };
     
 
